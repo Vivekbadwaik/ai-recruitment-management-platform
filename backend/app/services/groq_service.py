@@ -92,10 +92,18 @@ class GroqResumeParser:
         # Cap text length to prevent context exhaustion while maintaining full resume detail
         clean_input = resume_text.strip()[:25000]
 
-        # Call primary model, with fallback to 8b instant model if rate limited or unavailable
-        models_to_try = [self.model]
-        if "8b" not in self.model:
-            models_to_try.append("llama-3.1-8b-instant")
+        # Prioritize configured model with automatic fallback across available Groq models
+        candidate_models = [
+            self.model,
+            "qwen/qwen3.8-27b",
+            "openai/gpt-oss-120b",
+            "llama-3.3-70b-versatile",
+            "llama-3.1-8b-instant",
+        ]
+        models_to_try = []
+        for m in candidate_models:
+            if m and m not in models_to_try:
+                models_to_try.append(m)
 
         raw_response = None
         last_exception = None

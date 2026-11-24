@@ -179,11 +179,17 @@ async def upload_resume(
 
             if parsed_result.phone: profile.phone = parsed_result.phone
             if parsed_result.location: profile.location = parsed_result.location
-            if parsed_result.headline: profile.headline = parsed_result.headline
-            if parsed_result.summary: profile.summary = parsed_result.summary
+            if getattr(parsed_result, "headline", None): profile.headline = parsed_result.headline
+            summary_val = getattr(parsed_result, "professional_summary", None) or getattr(parsed_result, "summary", None)
+            if summary_val:
+                profile.summary = summary_val
+                if not profile.headline:
+                    profile.headline = summary_val.split(".")[0][:100]
             if parsed_result.skills: profile.skills = parsed_result.skills
             if parsed_result.education: profile.education = [e.model_dump() for e in parsed_result.education]
-            if parsed_result.experience: profile.experience = [e.model_dump() for e in parsed_result.experience]
+            exp_items = getattr(parsed_result, "employment_history", None) or getattr(parsed_result, "experience", None)
+            if exp_items:
+                profile.experience = [e.model_dump() if hasattr(e, "model_dump") else e for e in exp_items]
             if parsed_result.projects: profile.projects = [p.model_dump() for p in parsed_result.projects]
             if parsed_result.total_experience_years is not None:
                 profile.total_experience_years = parsed_result.total_experience_years
@@ -278,11 +284,17 @@ def reparse_resume(
 
         if parsed_result.phone: profile.phone = parsed_result.phone
         if parsed_result.location: profile.location = parsed_result.location
-        if parsed_result.headline: profile.headline = parsed_result.headline
-        if parsed_result.summary: profile.summary = parsed_result.summary
+        if getattr(parsed_result, "headline", None): profile.headline = parsed_result.headline
+        summary_val = getattr(parsed_result, "professional_summary", None) or getattr(parsed_result, "summary", None)
+        if summary_val:
+            profile.summary = summary_val
+            if not profile.headline:
+                profile.headline = summary_val.split(".")[0][:100]
         if parsed_result.skills: profile.skills = parsed_result.skills
         if parsed_result.education: profile.education = [e.model_dump() for e in parsed_result.education]
-        if parsed_result.experience: profile.experience = [e.model_dump() for e in parsed_result.experience]
+        exp_items = getattr(parsed_result, "employment_history", None) or getattr(parsed_result, "experience", None)
+        if exp_items:
+            profile.experience = [e.model_dump() if hasattr(e, "model_dump") else e for e in exp_items]
         if parsed_result.projects: profile.projects = [p.model_dump() for p in parsed_result.projects]
         if parsed_result.total_experience_years is not None:
             profile.total_experience_years = parsed_result.total_experience_years
