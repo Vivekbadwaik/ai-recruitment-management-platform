@@ -21,6 +21,14 @@ export const candidateService = {
     const res = await api.get('/api/candidates/me/resumes');
     return res.data;
   },
+  reparseResume: async (resumeId) => {
+    const res = await api.post(`/api/candidates/me/resumes/${resumeId}/reparse`);
+    return res.data;
+  },
+  getSystemHealth: async () => {
+    const res = await api.get('/api/health');
+    return res.data;
+  },
   applyForJob: async (jobId) => {
     const res = await api.post(`/api/candidates/me/apply/${jobId}`);
     return res.data;

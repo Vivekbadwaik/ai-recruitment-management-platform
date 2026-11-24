@@ -10,6 +10,8 @@ import {
   Sparkles,
   ArrowRight,
   Save,
+  RefreshCw,
+  ExternalLink,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -19,19 +21,45 @@ export default function CandidateResumeUpload() {
   const [resumes, setResumes] = useState([]);
   const [parsedData, setParsedData] = useState(null);
   const [savingReview, setSavingReview] = useState(false);
+  const [groqConfigured, setGroqConfigured] = useState(true);
+  const [reparsingId, setReparsingId] = useState(null);
 
-  const fetchResumes = async () => {
+  const checkStatusAndResumes = async () => {
     try {
-      const data = await candidateService.getResumes();
-      setResumes(data || []);
+      const [resumesData, healthData] = await Promise.allSettled([
+        candidateService.getResumes(),
+        candidateService.getSystemHealth(),
+      ]);
+      if (resumesData.status === 'fulfilled') {
+        setResumes(resumesData.value || []);
+      }
+      if (healthData.status === 'fulfilled') {
+        setGroqConfigured(Boolean(healthData.value?.groq_configured));
+      }
     } catch {
       // Non-blocking error
     }
   };
 
   useEffect(() => {
-    fetchResumes();
+    checkStatusAndResumes();
   }, []);
+
+  const handleReparse = async (resumeId) => {
+    setReparsingId(resumeId);
+    try {
+      const result = await candidateService.reparseResume(resumeId);
+      toast.success('Resume successfully parsed with Groq AI!');
+      if (result.parsed_data) {
+        setParsedData(result.parsed_data);
+      }
+      checkStatusAndResumes();
+    } catch (err) {
+      toast.error(err.response?.data?.detail || 'Re-parsing failed');
+    } finally {
+      setReparsingId(null);
+    }
+  };
 
   const handleFileChange = (e) => {
     const selected = e.target.files[0];
@@ -105,6 +133,35 @@ export default function CandidateResumeUpload() {
           Upload your resume in PDF or DOCX format. Our Groq-powered AI engine extracts your skills, experience, and education directly into your profile.
         </p>
       </div>
+
+      {/* Groq Configuration Alert */}
+      {!groqConfigured && (
+        <div className="bg-amber-50/90 border border-amber-200 rounded-2xl p-5 flex items-start gap-3.5 shadow-2xs">
+          <div className="w-9 h-9 rounded-xl bg-amber-100 flex items-center justify-center text-amber-700 shrink-0 mt-0.5">
+            <AlertCircle className="w-5 h-5" />
+          </div>
+          <div className="space-y-1.5 flex-1">
+            <h3 className="text-sm font-semibold text-amber-900">Groq AI API Key Required for Parsing</h3>
+            <p className="text-xs text-amber-800 leading-relaxed">
+              Resumes uploaded will be stored securely on the server and text extracted, but live AI parsing into skills, work history, and profile fields requires a free Groq API key configured in the backend environment.
+            </p>
+            <div className="pt-1.5 flex flex-wrap items-center gap-3 text-xs">
+              <a
+                href="https://console.groq.com/keys"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 font-semibold text-amber-950 underline hover:text-indigo-600 transition-colors"
+              >
+                Get Free API Key at console.groq.com <ExternalLink className="w-3 h-3" />
+              </a>
+              <span className="text-amber-300">•</span>
+              <span className="text-amber-800">
+                Add <code className="bg-amber-100 text-amber-950 px-1.5 py-0.5 rounded font-mono font-medium text-[11px]">GROQ_API_KEY=gsk_...</code> to <code className="bg-amber-100 text-amber-950 px-1.5 py-0.5 rounded font-mono font-medium text-[11px]">backend/.env</code>
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Upload Dropzone */}
       <div className="bg-white rounded-2xl border border-slate-200 p-8 shadow-2xs">
@@ -267,8 +324,8 @@ export default function CandidateResumeUpload() {
           ) : (
             resumes.map((r) => (
               <div key={r.id} className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-slate-50/50">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600 uppercase font-bold text-xs">
+                <div className="flex items-start gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600 uppercase font-bold text-xs shrink-0 mt-0.5">
                     {r.file_type}
                   </div>
                   <div>
@@ -276,21 +333,47 @@ export default function CandidateResumeUpload() {
                     <p className="text-xs text-slate-400 mt-0.5">
                       Uploaded on {new Date(r.uploaded_at).toLocaleDateString()} • {(r.file_size / 1024).toFixed(1)} KB
                     </p>
+                    {r.parsing_error && (
+                      <p className="text-xs text-red-600 mt-1.5 flex items-start gap-1 font-medium bg-red-50/80 border border-red-100 rounded-md px-2.5 py-1 max-w-xl">
+                        <AlertCircle className="w-3.5 h-3.5 shrink-0 mt-0.5 text-red-500" />
+                        <span>{r.parsing_error}</span>
+                      </p>
+                    )}
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 shrink-0">
                   {r.parsing_status === 'completed' && (
                     <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
                       <CheckCircle className="w-3.5 h-3.5" /> AI Parsed
                     </span>
                   )}
                   {r.parsing_status === 'failed' && (
-                    <span
-                      title={r.parsing_error || 'Parsing error'}
-                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-red-50 text-red-700 border border-red-200"
-                    >
-                      <AlertCircle className="w-3.5 h-3.5" /> Parsing Failed
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <span
+                        title={r.parsing_error || 'Parsing error'}
+                        className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-red-50 text-red-700 border border-red-200"
+                      >
+                        <AlertCircle className="w-3.5 h-3.5" /> Parsing Failed
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => handleReparse(r.id)}
+                        disabled={reparsingId === r.id}
+                        className="inline-flex items-center gap-1.5 px-3 py-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 rounded-lg text-xs font-medium transition-colors shadow-2xs disabled:opacity-50"
+                      >
+                        {reparsingId === r.id ? (
+                          <>
+                            <div className="animate-spin rounded-full h-3 w-3 border-2 border-indigo-600 border-t-transparent" />
+                            Retrying...
+                          </>
+                        ) : (
+                          <>
+                            <RefreshCw className="w-3 h-3" />
+                            Retry AI Parsing
+                          </>
+                        )}
+                      </button>
+                    </div>
                   )}
                   {r.parsing_status === 'pending' && (
                     <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200">

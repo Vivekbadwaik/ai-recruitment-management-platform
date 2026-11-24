@@ -236,6 +236,86 @@ def get_my_resumes(
     """List uploaded resumes for the candidate."""
     return db.query(Resume).filter(Resume.user_id == current_user.id).order_by(Resume.uploaded_at.desc()).all()
 
+@router.post("/me/resumes/{resume_id}/reparse", response_model=ResumeResponse)
+def reparse_resume(
+    resume_id: int,
+    current_user: User = Depends(require_role("candidate")),
+    db: Session = Depends(get_db)
+):
+    """Re-parse an existing uploaded resume using Groq LLM and update profile."""
+    resume_record = db.query(Resume).filter(
+        Resume.id == resume_id,
+        Resume.user_id == current_user.id
+    ).first()
+    if not resume_record:
+        raise HTTPException(status_code=404, detail="Resume not found.")
+
+    groq_parser = GroqResumeParser()
+    if not groq_parser.is_configured():
+        raise HTTPException(
+            status_code=400,
+            detail="Groq API key not configured. Set GROQ_API_KEY in backend/.env to parse resumes with AI."
+        )
+
+    # Ensure raw text exists
+    raw_text = resume_record.raw_text
+    if not raw_text or not raw_text.strip():
+        if os.path.exists(resume_record.file_path):
+            raw_text, _ = ResumeTextExtractor.extract_text(resume_record.file_path)
+            resume_record.raw_text = raw_text
+        else:
+            raise HTTPException(status_code=400, detail="Resume file not found on server.")
+
+    try:
+        parsed_result: ParsedResumeData = groq_parser.parse_resume_text(raw_text)
+        parsed_data_dict = parsed_result.model_dump()
+
+        # Update CandidateProfile automatically with parsed data
+        profile = db.query(CandidateProfile).filter(CandidateProfile.user_id == current_user.id).first()
+        if not profile:
+            profile = CandidateProfile(user_id=current_user.id)
+            db.add(profile)
+
+        if parsed_result.phone: profile.phone = parsed_result.phone
+        if parsed_result.location: profile.location = parsed_result.location
+        if parsed_result.headline: profile.headline = parsed_result.headline
+        if parsed_result.summary: profile.summary = parsed_result.summary
+        if parsed_result.skills: profile.skills = parsed_result.skills
+        if parsed_result.education: profile.education = [e.model_dump() for e in parsed_result.education]
+        if parsed_result.experience: profile.experience = [e.model_dump() for e in parsed_result.experience]
+        if parsed_result.projects: profile.projects = [p.model_dump() for p in parsed_result.projects]
+        if parsed_result.total_experience_years is not None:
+            profile.total_experience_years = parsed_result.total_experience_years
+        profile.is_ai_parsed = 1
+
+        if parsed_result.full_name and current_user.full_name in ["", "Candidate", "User"]:
+            current_user.full_name = parsed_result.full_name
+
+        # Generate candidate embedding
+        search_text = CandidateEmbeddingService.build_candidate_search_text(
+            full_name=current_user.full_name,
+            headline=profile.headline,
+            summary=profile.summary,
+            skills=profile.skills,
+            experience=profile.experience,
+            education=profile.education,
+            total_experience_years=profile.total_experience_years
+        )
+        CandidateEmbeddingService.store_or_update_candidate_embedding(db, current_user.id, search_text)
+
+        resume_record.parsed_data = parsed_data_dict
+        resume_record.parsing_status = "completed"
+        resume_record.parsing_error = None
+        db.commit()
+        db.refresh(resume_record)
+        return resume_record
+
+    except Exception as parse_err:
+        resume_record.parsing_status = "failed"
+        resume_record.parsing_error = str(parse_err)
+        db.commit()
+        raise HTTPException(status_code=400, detail=f"AI Parsing failed: {str(parse_err)}")
+
 @router.post("/me/apply/{job_id}", response_model=ApplicationResponse, status_code=status.HTTP_201_CREATED)
 def apply_for_job(
     job_id: int,
