@@ -57,3 +57,6 @@ htmlcov/
 *.swo
 .DS_Store
 Thumbs.db
+
+# Final demo recording
+submission/
