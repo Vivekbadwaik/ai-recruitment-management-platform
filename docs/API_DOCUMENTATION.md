@@ -2,10 +2,13 @@
 
 Base URL: `http://localhost:8000/api`
 
+## System & Diagnostics
+- `GET /api/health` - System health check, service version, and verification of Groq & SMTP configuration status.
+
 ## Authentication (`/api/auth`)
 - `POST /api/auth/register` - Create account (`email`, `full_name`, `password`, `role`). Returns JWT token.
 - `POST /api/auth/login` - Authenticate with email/password. Returns JWT bearer token.
-- `GET /api/auth/me` - Get logged-in user identity.
+- `GET /api/auth/me` - Get logged-in user identity and permissions.
 
 ## Candidate Portal (`/api/candidates`)
 - `GET /api/candidates/me/profile` - Fetch candidate profile.
@@ -33,8 +36,9 @@ Base URL: `http://localhost:8000/api`
 - `GET /api/admin/interviewers` - List all registered interviewers for interview assignment modals.
 - `GET /api/admin/applications` - List applications with filters (`status`, `job_id`), enriched with candidate profile details.
 - `POST /api/admin/jobs/{job_id}/shortlist/{candidate_user_id}` - Shortlist candidate directly from AI Matching or Directory, creating or updating application records.
-- `POST /api/admin/semantic-search` - Natural language query candidate search (`query`, `min_score`, `limit`).
+- `GET /api/admin/semantic-search` & `POST /api/admin/semantic-search` - Natural language query candidate search (`query`, `min_score`, `limit`).
 - `POST /api/admin/jobs/{job_id}/match-candidates` - Calculate hybrid 5-factor AI matching scores with Explainable AI rationale.
+- `GET /api/admin/jobs/{job_id}/matches` - Retrieve previously calculated/saved candidate matches for a specific job.
 - `GET /api/admin/candidates/{user_id}/match/{job_id}` - Individual candidate AI match score against a job.
 - `PUT /api/admin/applications/{app_id}/status` - Advance candidate status with Human-in-the-Loop override decision and notes.
 - `PUT /api/admin/applications/{app_id}/override` - Alias for application status and recruiter decision override.
