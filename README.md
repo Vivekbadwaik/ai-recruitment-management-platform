@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # AI-Powered Recruitment & Interview Management Platform
 
 An enterprise-grade, full-stack recruitment SaaS platform featuring LLM-powered resume parsing (Groq API / Llama 3.3), dense semantic vector candidate search, a 5-factor hybrid candidate-job matching algorithm with Explainable AI (XAI), role-based workflows for three distinct portals (Candidate, Admin Recruiter, Interviewer), and structured interview feedback scorecards.
@@ -347,3 +348,7 @@ A complete, time-coded presentation script with exact narration, screen setups, 
 - **Interactive Swagger UI:** Accessible at `http://127.0.0.1:8000/docs` while the backend is running.
 - **REST API Endpoint Reference:** Detailed endpoint specifications in [**docs/API_DOCUMENTATION.md**](docs/API_DOCUMENTATION.md).
 - **System Architecture & Database Schema:** Mermaid flowcharts and 10-table entity relationship diagrams in [**docs/ARCHITECTURE.md**](docs/ARCHITECTURE.md).
+=======
+# ai-recruitment-management-platform
+AI-powered recruitment and interview management platform
+>>>>>>> a8589d45d403626c13616e1f5c1d35e44abe473c
