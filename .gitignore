@@ -1,0 +1,59 @@
+# Dependencies
+node_modules/
+frontend/node_modules/
+__pycache__/
+*/__pycache__/
+*/*/__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+frontend/dist/
+build/
+*.egg
+
+# Virtual Environments
+venv/
+.venv/
+env/
+backend/venv/
+
+# Environment Variables & Secrets
+.env
+.env.local
+.env.*.local
+backend/.env
+frontend/.env
+
+# Database Files
+*.db
+*.sqlite
+*.sqlite3
+backend/recruitment.db
+recruitment.db
+
+# Uploaded Candidate Files & Resumes (Preserve .gitkeep)
+backend/uploads/resumes/*
+!backend/uploads/resumes/.gitkeep
+uploads/
+tmp/
+
+# Logs & Debugging
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Test & Cache Artifacts
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Editor & OS Artifacts
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
