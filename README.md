@@ -222,7 +222,8 @@ AI-Recruitment-Platform/
 ├── docs/
 │   ├── ARCHITECTURE.md     # Mermaid system architecture and full 10-table ER diagram
 │   ├── API_DOCUMENTATION.md # Complete REST API endpoint reference
-│   └── DEMO_SCRIPT.md      # Detailed 7–10 minute demonstration script
+│   ├── DEMO_SCRIPT.md      # Detailed 7–10 minute demonstration script
+│   └── LIVE_AI_VERIFICATION.md # Live Groq API verification test report
 ├── sample_resumes/         # Test PDF and DOCX resume files
 ├── .gitignore              # Git ignore rules
 └── README.md               # Master project documentation
@@ -343,12 +344,9 @@ A complete, time-coded presentation script with exact narration, screen setups, 
 
 ---
 
-## 📚 API Documentation & Architecture Diagrams
+## 📚 API Documentation, Live AI Verification & Architecture Diagrams
 
+- **Live AI Verification Report:** Real-time Groq API inference and parsing accuracy report in [**docs/LIVE_AI_VERIFICATION.md**](docs/LIVE_AI_VERIFICATION.md).
 - **Interactive Swagger UI:** Accessible at `http://127.0.0.1:8000/docs` while the backend is running.
 - **REST API Endpoint Reference:** Detailed endpoint specifications in [**docs/API_DOCUMENTATION.md**](docs/API_DOCUMENTATION.md).
 - **System Architecture & Database Schema:** Mermaid flowcharts and 10-table entity relationship diagrams in [**docs/ARCHITECTURE.md**](docs/ARCHITECTURE.md).
-=======
-# ai-recruitment-management-platform
-AI-powered recruitment and interview management platform
->>>>>>> a8589d45d403626c13616e1f5c1d35e44abe473c

@@ -1,256 +1,359 @@
-# AI Recruitment Platform: 7–10 Minute Assessment Demonstration Script
+# AI-Powered Recruitment Platform: Official 7–10 Minute Demo Recording Script
 
-This script provides an exact, step-by-step roadmap for recording or presenting the live technical demonstration of the **AI-Powered Recruitment & Interview Management Platform**.
+**Project:** AI-Powered Recruitment & Interview Management Platform  
+**Target Recording Duration:** **8 to 9.5 minutes** (strictly between 7 and 10 minutes)  
+**Author:** Vivek Krushna Badwaik  
+**GitHub Repository:** `https://github.com/Vivekbadwaik/ai-recruitment-management-platform`  
 
 ---
 
-## ⏱️ Demonstration Timeline Overview
+## 📋 Pre-Recording Setup & Checklist
 
-| Section | Topic | Portal / View | Target Time | Cumulative |
+### 1. Application Startup Commands
+
+Open two separate terminal windows:
+
+#### Terminal 1 — Backend API (FastAPI)
+```powershell
+cd C:\Users\vivek\.gemini\antigravity\scratch\AI-Recruitment-Platform\backend
+.\venv\Scripts\activate
+uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+```
+- Verify API is up: Open [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs) in your browser.
+
+#### Terminal 2 — Frontend Application (React 19 + Vite)
+```powershell
+cd C:\Users\vivek\.gemini\antigravity\scratch\AI-Recruitment-Platform\frontend
+npm.cmd run dev
+```
+- Verify Web App is up: Open [http://localhost:5173](http://localhost:5173) in your browser.
+
+---
+
+### 2. Pre-Configured Demo Credentials (Do Not Invent Accounts)
+
+| Role | Email | Password | Pre-Configured Data |
+| :--- | :--- | :--- | :--- |
+| **Admin (Recruiter)** | `admin@recruit.ai` | `admin123` | Full dashboard KPIs, 3 active jobs, shortlist management |
+| **Interviewer** | `interviewer@recruit.ai` | `interviewer123` | Assigned to candidate Priya Sharma for Technical Round 1 |
+| **Candidate 1** | `alex.rivera@example.com` | `candidate123` | Full-stack profile with Python, React, Docker skills |
+| **Candidate 2** | `priya.sharma@example.com` | `candidate123` | Machine Learning profile with scheduled interview |
+| **Candidate 3 (Live)** | `vivekbadwaik2022@gmail.com` | Your password | Parsed profile with real PDF upload (`VIVEK_RESUME.pdf`) |
+
+---
+
+### 3. Test Files to Keep Ready on Desktop / Downloads
+- `sample_resumes/John_Doe_FullStack.pdf`
+- `sample_resumes/Elena_Rostova_Data_Scientist.docx`
+- `sample_resumes/David_Kim_DevOps.pdf`
+
+---
+
+## ⏱️ Master Timeline & Sequence of Actions
+
+| # | Demonstration Topic | View / Page | Target Timestamp | Segment Duration |
 | :---: | :--- | :--- | :---: | :---: |
-| **1** | Introduction & Architectural Overview | Architecture Diagram | 0:45 | 0:45 |
-| **2** | Candidate Registration & Live AI Resume Parsing | Candidate Portal | 1:15 | 2:00 |
-| **3** | Job Discovery, 1-Click Apply & Instant AI Matching | Candidate Portal | 1:00 | 3:00 |
-| **4** | Admin Recruitment Command Center & Job Management | Admin Portal | 1:15 | 4:15 |
-| **5** | Bulk Resume Ingestion & Duplicate Detection | Admin Portal | 1:00 | 5:15 |
-| **6** | Semantic Talent Search & 5-Factor Hybrid AI Matching | Admin Portal | 1:30 | 6:45 |
-| **7** | Human-in-the-Loop Shortlisting & Interview Scheduling | Admin Portal | 1:00 | 7:45 |
-| **8** | Interviewer Scorecards & Evaluation Feedback | Interviewer Portal | 1:00 | 8:45 |
-| **9** | Security, RBAC Enforcement & Candidate Data Isolation | Cross-Role Test | 0:45 | 9:30 |
-| **10** | Conclusion, OpenAPI Docs & Test Suite Proof | Terminal & Swagger | 0:30 | 10:00 |
+| **1** | Project Introduction & Architecture | Landing / Architecture Diagram | 0:00 – 0:40 | 0:40 |
+| **2** | Candidate Registration & Login | `/register` & `/login` | 0:40 – 1:15 | 0:35 |
+| **3** | Candidate Profile & Resume Upload | `/candidate/resume` | 1:15 – 1:50 | 0:35 |
+| **4** | Real AI Resume Parsing & Profile Review/Edit | `/candidate/profile` | 1:50 – 2:30 | 0:40 |
+| **5** | Job Browsing & 1-Click Application | `/candidate/jobs` | 2:30 – 3:05 | 0:35 |
+| **6** | Admin Login & Recruitment KPI Dashboard | `/login` -> `/admin/dashboard` | 3:05 – 3:45 | 0:40 |
+| **7** | Job Management (CRUD) & Bulk Resume Ingestion | `/admin/jobs` & Bulk Modal | 3:45 – 4:30 | 0:45 |
+| **8** | 5-Factor AI Candidate Matching & Explainability (XAI) | `/admin/matching` | 4:30 – 5:15 | 0:45 |
+| **9** | Natural Language Semantic Talent Search | `/admin/semantic-search` | 5:15 – 5:55 | 0:40 |
+| **10** | Shortlisting & Human-in-the-Loop Override | `/admin/applications` | 5:55 – 6:30 | 0:35 |
+| **11** | Interview Scheduling & Automated Notifications | Schedule Modal | 6:30 – 7:05 | 0:35 |
+| **12** | Interviewer Portal & Evaluation Scorecards | `/interviewer/interviews` | 7:05 – 7:45 | 0:40 |
+| **13** | Candidate Visibility & Application Tracking | `/candidate/applications` | 7:45 – 8:15 | 0:30 |
+| **14** | Security & Candidate Data Isolation Demo | Cross-role URL tampering | 8:15 – 8:50 | 0:35 |
+| **15** | Database Persistence & Swagger API Documentation | SQLite & `/docs` | 8:50 – 9:30 | 0:40 |
+| **TOTAL** | **Complete Assessment Demonstration** | **Full System** | **9:30** | **9m 30s** |
 
 ---
 
-## Section 1: Introduction & Architectural Overview (0:00 – 0:45)
-
-### Screen Setup:
-- Display the platform landing screen at `http://localhost:5173` or `docs/ARCHITECTURE.md` flowchart.
-- Terminal showing FastAPI backend running on `http://127.0.0.1:8000`.
-
-### Narration / Actions:
-> *"Hello, and welcome to the technical demonstration of our AI-Powered Recruitment & Interview Management Platform. This enterprise-grade SaaS system is built on a modern full-stack decoupled architecture:*
-> *- **Backend:** High-performance Python FastAPI service with SQLite, SQLAlchemy 2.0 relational models, foreign-key enforcement, and JWT authentication.*
-> *- **AI / ML Engine:** Genuine integration with the Groq API (powered by Llama 3.3 70B) for zero-shot structured resume parsing, Sentence Transformers (`all-MiniLM-L6-v2`) for dense candidate vector embeddings, and a transparent 5-factor hybrid matching algorithm with Explainable AI.*
-> *- **Frontend:** React 19 single-page application with Tailwind CSS, Lucide icons, responsive tables, real-time KPI dashboards, and 3 independent role-based portals.*
-> *Let's begin by demonstrating the Candidate workflow."*
+## 🎬 Detailed Step-by-Step Recording Guide with Narration
 
 ---
 
-## Section 2: Candidate Registration & Live AI Resume Parsing (0:45 – 2:00)
+### Step 1: Project Introduction & Architecture (0:00 – 0:40)
 
-### Screen Setup:
+**On Screen:**
+- Display `docs/ARCHITECTURE.md` architecture diagram or platform login screen at `http://localhost:5173`.
+- Show backend terminal running `uvicorn` and frontend running Vite.
+
+**Spoken Narration:**
+> *"Hello, my name is Vivek Badwaik, and this is the final demonstration of the AI-Powered Recruitment & Interview Management Platform. This is a decoupled full-stack monorepo application. The backend is built on FastAPI, Python 3.14, SQLAlchemy 2.0 with foreign-key enforcement, and SQLite. The frontend is built on React 19, Tailwind CSS, Lucide icons, and Recharts. The AI engine features genuine Groq LLM resume parsing, Sentence Transformers dense vector embeddings, and a transparent 5-factor hybrid candidate matching algorithm with Explainable AI. Let’s start with the candidate experience."*
+
+---
+
+### Step 2: Candidate Registration & Login (0:40 – 1:15)
+
+**On Screen:**
 - Navigate to `http://localhost:5173/register`.
 
-### Steps & Actions:
-1. **Registration:**
-   - Click **"Register as Candidate"**.
-   - Input:
-     - Name: `Marcus Vance`
-     - Email: `marcus.vance@example.com`
-     - Password: `password123`
-   - Click **"Create Account"**. Show instant toast notification and redirect to Candidate Dashboard.
-2. **Inspect Blank Profile:**
-   - Navigate to the **Profile** tab (`/candidate/profile`).
-   - Point out that the profile starts empty with zero skills and zero years of experience.
-3. **Upload PDF Resume:**
-   - Click the file upload box or drag-and-drop `sample_resumes/John_Doe_FullStack.pdf` (or your preferred test resume).
-   - Click **"Upload & Parse with AI"**.
-   - Note the real-time loading spinner indicating PDF text extraction (PyMuPDF) and Groq LLM parsing.
-4. **Highlight Parsed Fields:**
-   - Show how the candidate profile automatically populates:
-     - Full Name, Phone, Location
-     - Professional Headline & Summary
-     - Total Experience: `5.0 years`
-     - Interactive skill badges: `Python`, `FastAPI`, `React`, `Docker`, `PostgreSQL`, `AWS`, etc.
-     - Work History with company names, roles, dates, and responsibilities.
-     - Education details with degree, field, and university.
-   - Point out the **"AI Parsed"** verification badge and demonstrate that the candidate can edit or add custom skills manually.
+**Actions:**
+1. Click **"Register as Candidate"**.
+2. Type:
+   - Full Name: `Marcus Vance`
+   - Email: `marcus.vance@example.com`
+   - Password: `password123`
+3. Click **"Create Account"**. Show the success toast and automatic redirection into the Candidate Dashboard.
+
+**Spoken Narration:**
+> *"Here we register a brand-new candidate, Marcus Vance. Notice that upon registration, passwords are never stored in plain text; they are encrypted using bcrypt hashing, and a secure JWT access token is issued to manage the session."*
 
 ---
 
-## Section 3: Job Discovery, 1-Click Apply & Instant AI Matching (2:00 – 3:00)
+### Step 3: Candidate Profile & Resume Upload (1:15 – 1:50)
 
-### Screen Setup:
-- Candidate logged in; navigate to **"Browse Jobs"** (`/candidate/jobs`).
+**On Screen:**
+- Navigate to **"Upload Resume"** (`/candidate/resume`).
 
-### Steps & Actions:
-1. **Explore Available Positions:**
-   - Show the active job listings:
-     - *Senior Full-Stack Engineer* (Python, React, Docker)
-     - *Machine Learning Engineer* (Python, PyTorch, Transformers)
-     - *DevOps / Cloud Specialist* (Kubernetes, Terraform, AWS)
-   - Filter or search for *"Full-Stack"*.
-2. **Submit Application:**
-   - Click on **"Senior Full-Stack Engineer"**.
-   - Review job requirements: 3+ years experience, Python, React, Docker.
-   - Click **"Apply Now"**.
-3. **Verify Instant AI Match Score:**
-   - Notice the instant AI match score computed immediately upon application (e.g., **92% Strong Match**).
-   - Navigate to **"My Applications"** (`/candidate/applications`).
-   - Highlight the application status badge: `Submitted`, application timestamp, and calculated match percentage.
-   - Log out of the candidate portal.
+**Actions:**
+1. Show the clean upload dropzone supporting PDF or DOCX up to 10MB.
+2. Select or drag-and-drop `sample_resumes/John_Doe_FullStack.pdf`.
+3. Click **"Upload & Parse Resume"**.
+4. Show the loading spinner *"Parsing with Groq AI..."*.
+
+**Spoken Narration:**
+> *"Now we upload a real sample PDF resume. Under the hood, PyMuPDF extracts the raw text stream, verifies document integrity, and transmits the text directly to our Groq Cloud inference service for zero-shot structured parsing."*
 
 ---
 
-## Section 4: Admin Recruitment Command Center & Job Management (3:00 – 4:15)
+### Step 4: Real AI Resume Parsing & Candidate Review/Edit (1:50 – 2:30)
 
-### Screen Setup:
+**On Screen:**
+- The resume finishes processing in ~2 seconds. The badge shows `● AI Parsed`.
+- Click **"Go to Full Profile →"** or navigate to `/candidate/profile`.
+
+**Actions:**
+1. Point out the extracted data:
+   - Name, phone, email, and location.
+   - Professional summary.
+   - Total experience years calculated mathematically.
+   - Extracted skill badges: `Python`, `FastAPI`, `React`, `Docker`, `PostgreSQL`, `AWS`, etc.
+   - Employment history and education cards.
+2. Add a new skill manually (e.g. `GraphQL`) to prove candidate editability and click **"Save Profile"**.
+
+**Spoken Narration:**
+> *"Groq structured the resume into a strict Pydantic model with zero hallucinations. All 18 skills, work experience dates, and education degrees were populated automatically. Candidates maintain full agency to edit or add custom skills, and every profile update automatically synchronizes the candidate's dense vector embedding in the background."*
+
+---
+
+### Step 5: Job Browsing & 1-Click Application (2:30 – 3:05)
+
+**On Screen:**
+- Navigate to **"Browse Jobs"** (`/candidate/jobs`).
+
+**Actions:**
+1. Browse active positions: *Senior Full Stack Python/React Engineer*, *Machine Learning & NLP Specialist*, *DevOps Architect*.
+2. Click on **"Senior Full Stack Python/React Engineer"**.
+3. Click **"Apply Now"**.
+4. Point out the instant feedback and navigate to **"My Applications"** (`/candidate/applications`).
+5. Show the application status badge: `Submitted`, application date, and instant matching score.
+6. Click **"Log Out"** in the sidebar.
+
+**Spoken Narration:**
+> *"Candidates can explore real-time job openings. When Marcus clicks Apply, the platform enforces database unique constraints to prevent duplicate applications and computes an instant matching baseline. Now let's switch to the Recruiter Portal."*
+
+---
+
+### Step 6: Admin Login & Recruitment KPI Dashboard (3:05 – 3:45)
+
+**On Screen:**
 - Navigate to `http://localhost:5173/login`.
-- Click the quick-fill button **"Admin Demo"** (`admin@recruit.ai` / `admin123`) and log in.
 
-### Steps & Actions:
-1. **Recruitment KPI Metrics:**
-   - Point out the top-level KPI cards populated by live backend APIs:
-     - Total Candidates, Total Resumes Ingested, Active Job Postings, Total Applications, Shortlisted Talent, Scheduled Interviews.
-   - Show the interactive Recharts distribution graphs displaying Application Pipeline stages and Skills Breakdown.
-2. **Job Postings CRUD:**
-   - Navigate to **"Jobs Management"** (`/admin/jobs`).
-   - Click **"Post New Job"**.
-   - Fill in:
-     - Title: `Lead AI Research Engineer`
-     - Location: `Remote / Hybrid`
-     - Min Experience: `4` years
-     - Required Skills: `Python, PyTorch, Transformers, LLM, LangChain`
-     - Status: `Active`
-   - Save the job and show it immediately appear in the active job listings.
+**Actions:**
+1. Click the quick-fill button **"Admin Demo"** (`admin@recruit.ai` / `admin123`).
+2. Click **"Sign In"**.
+3. Display the **Recruitment Command Center**:
+   - Live KPI cards: Total Candidates, Total Resumes, Active Jobs, Total Applications, Shortlisted, Interviews.
+   - Recharts visual graphs: Application Status Pipeline and Technical Skills Distribution.
+
+**Spoken Narration:**
+> *"Logging in as the Admin Recruiter brings us to the executive command center. None of these statistics are hardcoded; all metrics and Recharts pipeline charts are queried live from our FastAPI analytics endpoints."*
 
 ---
 
-## Section 5: Bulk Resume Ingestion & Duplicate Detection (4:15 – 5:15)
+### Step 7: Job Management (CRUD) & Bulk Resume Ingestion (3:45 – 4:30)
 
-### Screen Setup:
-- Navigate to **"Bulk Resume Upload"** (`/admin/resumes` or modal).
+**On Screen:**
+- Navigate to **"Jobs Management"** (`/admin/jobs`).
 
-### Steps & Actions:
-1. **Simultaneous Multi-File Upload:**
-   - Select multiple test files from `sample_resumes/`:
-     - `John_Doe_FullStack.pdf`
-     - `Elena_Rostova_Data_Scientist.docx`
-     - `David_Kim_DevOps.pdf`
-   - Click **"Process Resumes"**.
-2. **Show Processing Table & Error Isolation:**
-   - Demonstrate the real-time processing feedback table displaying:
-     - Filename, Detected Format, Extracted Characters, AI Parsing Status, Candidate Association.
-   - Point out how each file is processed in an isolated transaction: one failure or unsupported file does not abort the rest of the batch.
-3. **Demonstrate Duplicate Detection:**
-   - Re-upload `John_Doe_FullStack.pdf`.
-   - Point out the system response: the system recognizes the existing candidate by normalized email, links the new resume version to the existing profile without creating orphaned or duplicate user records.
+**Actions:**
+1. Click **"Post New Job"** and quickly fill:
+   - Title: `Cloud & AI Solutions Architect`
+   - Location: `Remote / Hybrid`
+   - Min Experience: `4.0`
+   - Required Skills: `Python, Docker, Kubernetes, AWS, FastAPI`
+   - Status: `Active`
+2. Save the job and show it in the list.
+3. Open **Bulk Resume Upload** (modal or tab) and select `Elena_Rostova_Data_Scientist.docx` and `David_Kim_DevOps.pdf`.
+4. Process batch: show the per-file transaction status and explain duplicate detection by email.
+
+**Spoken Narration:**
+> *"Recruiters have full CRUD capabilities over job requisitions. In the Bulk Ingestion engine, multiple resumes are parsed concurrently in isolated transactions. If an applicant already exists, the platform updates their resume record without creating orphaned or duplicate user rows."*
 
 ---
 
-## Section 6: Semantic Talent Search & 5-Factor Hybrid AI Matching (5:15 – 6:45)
+### Step 8: 5-Factor AI Candidate Matching & Explainability (4:30 – 5:15)
 
-### Screen Setup:
+**On Screen:**
+- Navigate to **"AI Job Matching"** (`/admin/matching`).
+
+**Actions:**
+1. Select Job: *Senior Full Stack Python/React Engineer*.
+2. Click **"Calculate AI Match Scores"**.
+3. Show the ranked leaderboard of candidates.
+4. Click **"View Match Breakdown"** or the candidate name to open the **Explainable AI (XAI) Modal**:
+   - **Required Skills Match (40% weight):** 100%
+   - **Experience Match (20% weight):** 100%
+   - **Education Match (10% weight):** 100%
+   - **Preferred Skills Match (10% weight):** 75%
+   - **Semantic Vector Cosine Similarity (20% weight):** 88%
+   - **Overall Composite Score:** `93.0%`
+5. Read the generated natural language reasoning explaining strengths and missing items.
+
+**Spoken Narration:**
+> *"Here is our genuine 5-factor hybrid matching engine. Instead of a black-box score, we evaluate required skills at 40%, experience at 20%, education at 10%, preferred skills at 10%, and dense semantic vector similarity at 20%. The system generates transparent Explainable AI reasoning detailing exactly why this candidate ranked at the top."*
+
+---
+
+### Step 9: Natural Language Semantic Talent Search (5:15 – 5:55)
+
+**On Screen:**
 - Navigate to **"Semantic Search"** (`/admin/semantic-search`).
 
-### Steps & Actions:
-1. **Natural Language Semantic Search:**
-   - Enter a conversational query in plain English:
-     > *"Find a data scientist or ML engineer with strong PyTorch, deep learning, and transformer experience."*
-   - Set the similarity threshold to `0.50` and click **"Search Talent"**.
-   - Show the vector search results returned via Sentence Transformers cosine similarity:
-     - Elena Rostova (Data Scientist) ranks at the top with high cosine similarity (e.g. 0.84).
-     - Point out that neither the candidate headline nor filename needed an exact string match—the vector embedding captured the conceptual meaning of the query.
-2. **Explainable 5-Factor Hybrid Matching:**
-   - Navigate to **"AI Job Matching"** (`/admin/matching` or job candidate matching tab).
-   - Select the job: *Senior Full-Stack Engineer*.
-   - Click **"Calculate AI Match Scores"**.
-   - Show the candidate leaderboard ranked from highest to lowest score.
-   - Click on the top candidate to reveal the **Explainable AI (XAI) Modal**:
-     - **Required Skills Match (40% weight):** 100% (Matched Python, React, Docker).
-     - **Experience Match (20% weight):** 100% (Candidate has 5 yrs vs 3 yrs required).
-     - **Education Match (10% weight):** 100% (B.S. in Computer Science).
-     - **Preferred Skills Match (10% weight):** 75% (Matched AWS, PostgreSQL).
-     - **Semantic Vector Similarity (20% weight):** 88% dense alignment.
-     - **Composite Match Score:** **93.6%**.
-     - Display the natural language rationale generated by the system explaining strengths and missing criteria.
+**Actions:**
+1. Type a natural language query in plain English:
+   > *"Find a data scientist or machine learning engineer with deep learning, PyTorch, and transformer models experience."*
+2. Set similarity threshold to `0.50` and click **"Search Talent"**.
+3. Display the ranked results: Elena Rostova appears at the top with high cosine similarity (e.g. 0.82).
+4. Highlight that this was achieved via dense vector representations from `all-MiniLM-L6-v2`, not simple keyword string matching.
+
+**Spoken Narration:**
+> *"Our semantic search converts conversational recruiter queries into 384-dimensional vector embeddings, computing cosine similarity against candidate profiles. Elena Rostova ranks first even though her job title wasn't an exact keyword match."*
 
 ---
 
-## Section 7: Human-in-the-Loop Shortlisting & Interview Scheduling (6:45 – 7:45)
+### Step 10: Shortlisting & Human-in-the-Loop Override (5:55 – 6:30)
 
-### Screen Setup:
-- In the AI Matching table or Applications list (`/admin/applications`).
+**On Screen:**
+- In the Candidate Matching view or Applications list (`/admin/applications`).
 
-### Steps & Actions:
-1. **Human-in-the-Loop Decision Override:**
-   - Select Marcus Vance or Alex Rivera.
-   - Click **"Shortlist Candidate"**.
-   - Enter recruiter review notes: *"Candidate has exemplary full-stack experience and solid Docker background. Fast-tracking to Round 1 Technical."*
-   - Change decision status to `Shortlisted`. Notice the recruiter decision is stored independently from the AI algorithm recommendation.
-2. **Schedule an Interview:**
-   - Click **"Schedule Interview"**.
-   - In the modal:
-     - Assign Interviewer: Select `Dr. Sarah Chen (Senior Technical Lead)` from the dropdown.
-     - Date & Time: Select tomorrow at `10:00 AM`.
-     - Round Type: `Technical Round 1`.
-     - Meeting Link: `https://meet.google.com/abc-defg-hij`.
-   - Click **"Confirm Interview"**.
-   - Show toast notification and automated in-app notification dispatch to both candidate and interviewer.
-3. **Data Export:**
-   - Click **"Export Shortlist"** -> Download as **CSV** and **Excel (.xlsx)**.
-   - Show that the exported spreadsheet contains candidate names, email, matched score, and status.
-   - Log out of Admin.
+**Actions:**
+1. Click **"Shortlist Candidate"** for the top applicant.
+2. In the decision box, enter recruiter notes:
+   > *"Exceptional full-stack architecture background. Fast-tracking to Round 1 Technical."*
+3. Advance status to `Shortlisted`.
+4. Point out that the recruiter decision and notes are stored independently from the AI recommendation.
+5. Click **"Export Shortlist"** -> Download as **CSV** and **Excel (.xlsx)** to show real file generation.
+
+**Spoken Narration:**
+> *"The platform emphasizes Human-in-the-Loop recruitment. Recruiters can override AI recommendations, log private notes, advance candidate stages, and export verified shortlists to Excel and CSV with one click."*
 
 ---
 
-## Section 8: Interviewer Scorecards & Evaluation Feedback (7:45 – 8:45)
+### Step 11: Interview Scheduling & Automated Notifications (6:30 – 7:05)
 
-### Screen Setup:
-- Login page; click **"Interviewer Demo"** (`interviewer@recruit.ai` / `interviewer123`).
+**On Screen:**
+- Click **"Schedule Interview"** on the shortlisted candidate card.
 
-### Steps & Actions:
-1. **Assigned Interviews Dashboard:**
-   - Navigate to **"My Interviews"** (`/interviewer/interviews`).
-   - Highlight that the interviewer *only* sees candidates assigned specifically to them, with no access to administrative salary or recruiter notes.
-2. **Candidate Profile Inspection:**
-   - Click **"View Candidate Profile"**.
-   - Review verified skills, past projects, and resume details directly in the side panel.
-3. **Structured Evaluation Scorecard Submission:**
-   - Click **"Submit Feedback"**.
-   - Provide structured ratings (1 to 5 stars):
-     - Technical Proficiency: `5 / 5`
-     - Problem Solving & Architecture: `4 / 5`
-     - Communication & Culture Fit: `5 / 5`
-     - Overall Score: Automatically averaged to `4.7 / 5`.
-   - Final Recommendation: Select **"Strong Hire"**.
-   - Detailed Remarks: *"Excellent systems design capability, explained caching strategies clearly, strong React and FastAPI proficiency."*
-   - Click **"Submit Scorecard"**.
-   - Notice the status badge updates to `Completed` with feedback locked and archived.
-   - Log out of Interviewer.
+**Actions:**
+1. In the modal:
+   - Assign Interviewer: Select `Dr. Sarah Chen (Senior Technical Lead)` from the registered interviewers dropdown.
+   - Date & Time: Tomorrow at `10:00 AM`.
+   - Round Type: `Technical Round 1`.
+   - Meeting Link: `https://meet.google.com/abc-defg-hij`.
+2. Click **"Confirm Interview"**.
+3. Show the success toast and in-app notification dispatch.
+4. Log out of Admin.
+
+**Spoken Narration:**
+> *"When the recruiter schedules the interview and assigns Dr. Sarah Chen, the database records the interview round and dispatches automated in-app notifications to both the candidate and interviewer."*
 
 ---
 
-## Section 9: Security, RBAC Enforcement & Candidate Data Isolation (8:45 – 9:30)
+### Step 12: Interviewer Portal & Evaluation Scorecards (7:05 – 7:45)
 
-### Screen Setup:
-- Browser and Terminal / API test view.
+**On Screen:**
+- Login page; click quick-fill button **"Interviewer Demo"** (`interviewer@recruit.ai` / `interviewer123`).
 
-### Steps & Actions:
-1. **Candidate Verification of Updates:**
-   - Log in as the candidate (`alex.rivera@example.com` or newly created candidate).
-   - Open **"Notifications"** bell in top navbar: show *"Interview Scheduled: Technical Round 1 with Dr. Sarah Chen"*.
-   - Open **"My Interviews"**: show interview card with meeting link, scheduled time, and status.
-2. **Data Isolation & Unauthorized Boundary Test:**
-   - Demonstrate that if a candidate attempts to navigate to `/admin/dashboard` or call `/api/admin/candidates`, the application immediately denies access with `403 Forbidden` and redirects safely.
-   - Demonstrate that Candidate A cannot view Candidate B's resume or applications by user ID parameter tampering.
+**Actions:**
+1. Navigate to **"My Assigned Interviews"** (`/interviewer/interviews`).
+2. Show that Dr. Sarah Chen only sees interviews specifically assigned to her.
+3. Click **"View Candidate Profile"** to review parsed skills and resume in the side drawer.
+4. Click **"Submit Feedback"**:
+   - Technical Proficiency: `5 / 5`
+   - Problem Solving & System Design: `4 / 5`
+   - Communication: `5 / 5`
+   - Recommendation: Select **"Strong Hire"**.
+   - Remarks: *"Excellent systems design capability, explained caching strategies clearly, strong React and FastAPI proficiency."*
+5. Click **"Submit Scorecard"**. Show the status change to `Completed` with locked scorecard.
+6. Log out.
+
+**Spoken Narration:**
+> *"In the Interviewer Portal, interviewers have authorized access strictly to their assigned candidates. They can review the parsed resume and submit structured scorecards with multi-criteria 1-to-5 star ratings, qualitative remarks, and final hiring recommendations."*
+
+---
+
+### Step 13: Candidate Visibility & Application Tracking (7:45 – 8:15)
+
+**On Screen:**
+- Log in as the candidate (`alex.rivera@example.com` / `candidate123` or Marcus Vance).
+
+**Actions:**
+1. Click the **Notification Bell 🔔** in the top navbar: show *"Interview Scheduled: Technical Round 1"*.
+2. Navigate to **"My Interviews"** (`/candidate/interviews`): show the scheduled interview card with meeting link, interviewer name, and time.
+3. Navigate to **"My Applications"** (`/candidate/applications`): show the status progressed to `Interview Scheduled`.
+
+**Spoken Narration:**
+> *"Back in the Candidate Portal, the candidate receives real-time notification updates, can join the meeting link directly, and sees their application status transparently updated."*
 
 ---
 
-## Section 10: Conclusion, OpenAPI Docs & Verification Proof (9:30 – 10:00)
+### Step 14: Security & Candidate Data Isolation Demo (8:15 – 8:50)
 
-### Screen Setup:
-- Split screen: Browser at `http://127.0.0.1:8000/docs` (Swagger UI) and Terminal running test suites.
+**On Screen:**
+- Still logged in as Candidate.
 
-### Steps & Actions:
-1. **FastAPI Swagger Documentation:**
-   - Scroll through the interactive OpenAPI documentation covering all 28 production endpoints across Auth, Candidates, Jobs, Admin, Interviews, and Notifications.
-2. **Automated Verification:**
-   - In terminal, show the 3 passing test suites:
-     - `test_database.py` (Database relationships & constraints: PASS)
-     - `test_ai_engine.py` (AI extraction, Groq parser, vector embeddings: PASS)
-     - `test_full_integration.py` (Full candidate-admin-interviewer flow: PASS)
-3. **Closing Statement:**
-   > *"The AI-Powered Recruitment & Interview Management Platform is complete, robustly tested, and fully ready for assessment submission. Thank you!"*
+**Actions:**
+1. **RBAC Guard Test:**
+   - In browser address bar, try navigating directly to `http://localhost:5173/admin/dashboard`.
+   - Show that the frontend route guard immediately blocks access and redirects to candidate dashboard with an Unauthorized alert.
+2. **Data Isolation Test:**
+   - Open Developer Tools Console or mention API boundary: Candidate tokens cannot view other candidates' private resumes, salary notes, or administrative data (`403 Forbidden`).
+
+**Spoken Narration:**
+> *"Security is strictly enforced. Role-based guards prevent candidates from accessing admin or interviewer routes. Furthermore, backend API dependencies enforce data isolation—a candidate token attempting to access another user's profile is immediately rejected with HTTP 403 Forbidden."*
 
 ---
+
+### Step 15: Database Persistence & Swagger API Documentation (8:50 – 9:30)
+
+**On Screen:**
+- Split screen: Browser showing `http://127.0.0.1:8000/docs` (Swagger UI) and Terminal running test suites.
+
+**Actions:**
+1. Scroll through the **FastAPI Swagger OpenAPI documentation**:
+   - Highlight all 28 production endpoints across Auth, Candidates, Jobs, Admin, Interviews, and Notifications.
+2. Point out that all data is persisted in SQLite with foreign keys enabled (`PRAGMA foreign_keys = ON`).
+3. Conclude with a clear closing statement.
+
+**Spoken Narration:**
+> *"All endpoints are fully documented via FastAPI's OpenAPI specification. Every single record—from candidate profiles to vector embeddings, job applications, and interview feedback—is persisted in SQLite. The platform has passed all 33 automated database, AI, and integration tests with 100% success. Thank you!"*
+
+---
+
+## 🛑 Recording Day Final Checklist
+
+Before pressing Record on OBS / Screen Recorder:
+- [ ] Backend running (`uvicorn app.main:app --reload --host 127.0.0.1 --port 8000`)
+- [ ] Frontend running (`npm.cmd run dev` on `http://localhost:5173`)
+- [ ] Database contains seeded demo data (`python seed_data.py`)
+- [ ] Groq API key configured in `backend/.env`
+- [ ] `sample_resumes/` folder open and accessible for drag-and-drop
+- [ ] Browser zoom set to 100% or 110% for crisp readability
+- [ ] Microphone tested and background noise minimized
+- [ ] Target duration timer kept visible on phone or secondary monitor (aim for 8:30 to 9:15)
